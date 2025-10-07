@@ -145,8 +145,8 @@ export function VoiceCountingInterface() {
 
       {/* Main Interface */}
       <WorksheetGrid
-        ingredients={ingredients}
-        locations={locations}
+        ingredients={ingredients as any}
+        locations={locations as any}
         onSubmit={handleSubmitWorksheet}
       />
 
