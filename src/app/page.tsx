@@ -12,7 +12,7 @@ export default async function Home() {
         <p className="text-gray-600">Welcome back, {user.email}</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Inventory Management</CardTitle>
@@ -72,6 +72,21 @@ export default async function Home() {
               className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-orange-600 text-white hover:bg-orange-700 h-10 px-4 py-2 w-full"
             >
               📄 Process Invoices
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>POS Integration</CardTitle>
+            <CardDescription>Import and analyze sales data</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link 
+              href="/pos-integration" 
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-indigo-600 text-white hover:bg-indigo-700 h-10 px-4 py-2 w-full"
+            >
+              📊 Import POS Data
             </Link>
           </CardContent>
         </Card>

@@ -119,14 +119,14 @@
   - Verify location aggregation and final total calculations
   - _Requirements: 14.1, 14.3, 14.4_
 
-- [ ] 7. Invoice Processing and OCR System
+- [x] 7. Invoice Processing and OCR System
   - Integrate OCR service (Tesseract/Vision API) for invoice text extraction
   - Implement invoice upload system with file validation and security scanning
   - Create data standardization engine for various supplier invoice formats
   - Build price delta detection system with threshold-based approval workflow
   - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
 
-- [ ] 7.1 Invoice Processing Interface
+- [x] 7.1 Invoice Processing Interface
   - Create invoice upload interface with drag-and-drop functionality
   - Build OCR results review and correction interface
   - Implement price delta review queue with approval/rejection controls
