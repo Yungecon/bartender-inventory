@@ -51,20 +51,21 @@ export function ProductMapping({ posItems, onMappingComplete }: ProductMappingPr
     setMappings(initialMappings)
   }, [posItems])
 
-  const suggestIngredientMapping = (posItemName: string) => {
+  const suggestIngredientMapping = (posItemName: string): any => {
     if (!ingredients) return null
 
     const lowerPosName = posItemName.toLowerCase()
+    const ingredientList = ingredients as any[]
     
     // Try exact match first
-    let match = ingredients.find(ing => 
+    let match = ingredientList.find((ing: any) => 
       ing.name.toLowerCase() === lowerPosName
     )
     
     if (match) return match
 
     // Try partial matches
-    match = ingredients.find(ing => 
+    match = ingredientList.find((ing: any) => 
       lowerPosName.includes(ing.name.toLowerCase()) ||
       ing.name.toLowerCase().includes(lowerPosName)
     )
@@ -83,7 +84,7 @@ export function ProductMapping({ posItems, onMappingComplete }: ProductMappingPr
 
     for (const [category, keywords] of Object.entries(categoryKeywords)) {
       if (keywords.some(keyword => lowerPosName.includes(keyword))) {
-        match = ingredients.find(ing => 
+        match = ingredientList.find((ing: any) => 
           ing.category?.toLowerCase().includes(category) ||
           ing.name.toLowerCase().includes(category)
         )
@@ -105,7 +106,7 @@ export function ProductMapping({ posItems, onMappingComplete }: ProductMappingPr
   }
 
   const setIngredientMapping = (posItemName: string, ingredientId: string) => {
-    const ingredient = ingredients?.find(ing => ing.id === ingredientId)
+    const ingredient = (ingredients as any[])?.find((ing: any) => ing.id === ingredientId)
     if (ingredient) {
       updateMapping(posItemName, 'ingredient_id', ingredientId)
       updateMapping(posItemName, 'ingredient_name', ingredient.name)
@@ -263,7 +264,7 @@ export function ProductMapping({ posItems, onMappingComplete }: ProductMappingPr
                             <SelectValue placeholder="Select ingredient..." />
                           </SelectTrigger>
                           <SelectContent>
-                            {ingredients?.map(ingredient => (
+                            {(ingredients as any[])?.map((ingredient: any) => (
                               <SelectItem key={ingredient.id} value={ingredient.id}>
                                 {ingredient.name} - {ingredient.category}
                               </SelectItem>
