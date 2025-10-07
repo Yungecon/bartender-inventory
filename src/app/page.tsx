@@ -1,103 +1,143 @@
-import Image from "next/image";
+'use client'
+
+import { trpc } from '@/components/providers/trpc-provider'
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { data: ingredients, isLoading } = trpc.ingredients.list.useQuery()
+  const { data: suppliers } = trpc.suppliers.list.useQuery()
+  const { data: locations } = trpc.locations.list.useQuery()
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            Bartender Inventory System
+          </h1>
+          <p className="text-lg text-gray-600">
+            Comprehensive inventory management for bars - No authentication required!
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Ingredients Card */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Ingredients</h2>
+            {isLoading ? (
+              <p className="text-gray-500">Loading ingredients...</p>
+            ) : (
+              <div>
+                <p className="text-3xl font-bold text-blue-600 mb-2">
+                  {ingredients?.length || 0}
+                </p>
+                <p className="text-sm text-gray-500">Total ingredients in system</p>
+                {ingredients && ingredients.length > 0 && (
+                  <div className="mt-4">
+                    <p className="text-sm font-medium text-gray-700 mb-2">Recent:</p>
+                    <ul className="text-sm text-gray-600 space-y-1">
+                      {ingredients.slice(0, 3).map((ingredient: any) => (
+                        <li key={ingredient.id} className="flex justify-between">
+                          <span>{ingredient.name}</span>
+                          <span className="text-green-600">${ingredient.current_price}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Suppliers Card */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Suppliers</h2>
+            <div>
+              <p className="text-3xl font-bold text-green-600 mb-2">
+                {suppliers?.length || 0}
+              </p>
+              <p className="text-sm text-gray-500">Active suppliers</p>
+              {suppliers && suppliers.length > 0 && (
+                <div className="mt-4">
+                  <p className="text-sm font-medium text-gray-700 mb-2">Suppliers:</p>
+                  <ul className="text-sm text-gray-600 space-y-1">
+                    {suppliers.slice(0, 3).map((supplier: any) => (
+                      <li key={supplier.id} className="flex justify-between">
+                        <span>{supplier.name}</span>
+                        <span className="text-blue-600">{supplier._count.ingredients} items</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Locations Card */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Locations</h2>
+            <div>
+              <p className="text-3xl font-bold text-purple-600 mb-2">
+                {locations?.length || 0}
+              </p>
+              <p className="text-sm text-gray-500">Storage locations</p>
+              {locations && locations.length > 0 && (
+                <div className="mt-4">
+                  <p className="text-sm font-medium text-gray-700 mb-2">Locations:</p>
+                  <ul className="text-sm text-gray-600 space-y-1">
+                    {locations.map((location: any) => (
+                      <li key={location.id} className="flex justify-between">
+                        <span className="capitalize">{location.name}</span>
+                        <span className="text-purple-600">{location._count.snapshots} records</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Status Section */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">System Status</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span className="text-gray-700">Database Connected</span>
+            </div>
+            <div className="flex items-center space-x-3">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span className="text-gray-700">tRPC API Active</span>
+            </div>
+            <div className="flex items-center space-x-3">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span className="text-gray-700">No Authentication Required</span>
+            </div>
+            <div className="flex items-center space-x-3">
+              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+              <span className="text-gray-700">Ready for Development</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="mt-8 text-center">
+          <p className="text-gray-600 mb-4">
+            Your bartender inventory system is ready! All API endpoints are accessible without authentication.
+          </p>
+          <div className="space-x-4">
+            <a href="/ingredients" className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors inline-block">
+              View Ingredients
+            </a>
+            <a href="/suppliers" className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors inline-block">
+              Manage Suppliers
+            </a>
+            <a href="/inventory" className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors inline-block">
+              Track Inventory
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
-  );
+  )
 }

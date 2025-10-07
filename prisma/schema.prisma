@@ -1,0 +1,198 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AutoSendPolicy {
+  MANUAL_APPROVE
+  AUTO_SEND_BUSINESS_HOURS
+  AUTO_SEND_ALWAYS
+}
+
+enum InvoiceStatus {
+  PENDING
+  PROCESSED
+  ERROR
+}
+
+enum DraftStatus {
+  DRAFT
+  SENT
+  CANCELLED
+}
+
+enum GeneratedBy {
+  SYSTEM
+  USER
+}
+
+// User authentication removed for now - can be added back later when needed
+
+model Ingredient {
+  id                  String   @id @default(uuid())
+  name               String
+  supplier_id        String
+  bottle_size        String
+  current_price      Decimal  @db.Decimal(10, 2)
+  category           String
+  tags               String[]
+  metadata           Json?    // AI-generated profiles
+  par_level          Int?
+  default_reorder_qty Int?
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+  
+  supplier           Supplier @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+  snapshots          InventorySnapshot[]
+  invoice_lines      InvoiceLine[]
+
+  @@index([supplier_id])
+  @@index([category])
+  @@index([tags])
+  @@map("ingredients")
+}
+
+model Supplier {
+  id                 String         @id @default(uuid())
+  name              String
+  contact_name      String?
+  email             String?
+  cc_emails         String[]
+  email_template_id String?
+  auto_send_policy  AutoSendPolicy @default(MANUAL_APPROVE)
+  created_at        DateTime       @default(now())
+  updated_at        DateTime       @updatedAt
+  
+  ingredients       Ingredient[]
+  invoices          Invoice[]
+  reorder_drafts    ReorderDraft[]
+  email_template    EmailTemplate? @relation(fields: [email_template_id], references: [id])
+
+  @@index([email_template_id])
+  @@map("suppliers")
+}
+
+model Location {
+  id         String   @id @default(uuid())
+  name       String   @unique
+  created_at DateTime @default(now())
+  
+  snapshots  InventorySnapshot[]
+
+  @@map("locations")
+}
+
+model InventorySnapshot {
+  id            String   @id @default(uuid())
+  ingredient_id String
+  location_id   String
+  count         Int
+  total_value   Decimal  @db.Decimal(10, 2)
+  submitted_at  DateTime @default(now())
+  
+  ingredient    Ingredient @relation(fields: [ingredient_id], references: [id], onDelete: Cascade)
+  location      Location   @relation(fields: [location_id], references: [id], onDelete: Cascade)
+
+  @@index([ingredient_id])
+  @@index([location_id])
+  @@index([submitted_at])
+  @@map("inventory_snapshots")
+}
+
+model Invoice {
+  id           String        @id @default(uuid())
+  supplier_id  String
+  invoice_date DateTime
+  source_file  String
+  status       InvoiceStatus @default(PENDING)
+  created_at   DateTime      @default(now())
+  
+  supplier     Supplier @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+  lines        InvoiceLine[]
+
+  @@index([supplier_id])
+  @@index([status])
+  @@index([invoice_date])
+  @@map("invoices")
+}
+
+model InvoiceLine {
+  id            String   @id @default(uuid())
+  invoice_id    String
+  ingredient_id String?
+  vendor_sku    String
+  pack_size     String
+  unit_price    Decimal  @db.Decimal(10, 2)
+  purchased_qty Int
+  delta         Decimal? @db.Decimal(10, 2)
+  
+  invoice       Invoice     @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
+  ingredient    Ingredient? @relation(fields: [ingredient_id], references: [id])
+
+  @@index([invoice_id])
+  @@index([ingredient_id])
+  @@map("invoice_lines")
+}
+
+model ReorderDraft {
+  id                 String      @id @default(uuid())
+  supplier_id        String
+  items              Json        // Array of {ingredient_id, quantity, notes}
+  additional_context String?
+  status             DraftStatus @default(DRAFT)
+  generated_by       GeneratedBy @default(SYSTEM)
+  created_at         DateTime    @default(now())
+  sent_at           DateTime?
+  
+  supplier          Supplier @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+
+  @@index([supplier_id])
+  @@index([status])
+  @@map("reorder_drafts")
+}
+
+model EmailTemplate {
+  id              String   @id @default(uuid())
+  name            String
+  subject_template String
+  body_template   String
+  locale          String   @default("en")
+  created_at      DateTime @default(now())
+  
+  suppliers       Supplier[]
+
+  @@map("email_templates")
+}
+
+model RestaurantProfile {
+  id         String   @id @default(uuid())
+  name       String
+  attributes Json     // Flexible profile data
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("restaurant_profiles")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  user_id    String?
+  action     String
+  entity_type String
+  entity_id  String?
+  details    Json?
+  created_at DateTime @default(now())
+
+  @@index([user_id])
+  @@index([action])
+  @@index([entity_type])
+  @@index([created_at])
+  @@map("audit_logs")
+}
