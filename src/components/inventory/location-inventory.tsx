@@ -92,7 +92,7 @@ export function LocationInventory({ locationId }: LocationInventoryProps) {
                 <CardTitle className="text-sm font-medium">Recent Entries</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{location.snapshots?.length || 0}</div>
+                <div className="text-2xl font-bold">{(location as any).snapshots?.length || 0}</div>
                 <p className="text-xs text-muted-foreground">Last 20 inventory entries</p>
               </CardContent>
             </Card>
