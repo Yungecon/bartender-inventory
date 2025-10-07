@@ -18,19 +18,19 @@ async function processOCR(filePath: string, fileName: string) {
         description: 'Premium Vodka 750ml',
         quantity: Math.floor(Math.random() * 10) + 1,
         unit_price: (Math.random() * 50 + 20).toFixed(2),
-        total: 0
+        total: '0.00'
       },
       {
         description: 'House Gin 1L',
         quantity: Math.floor(Math.random() * 8) + 1,
         unit_price: (Math.random() * 40 + 15).toFixed(2),
-        total: 0
+        total: '0.00'
       },
       {
         description: 'Craft Beer Case',
         quantity: Math.floor(Math.random() * 5) + 1,
         unit_price: (Math.random() * 30 + 25).toFixed(2),
-        total: 0
+        total: '0.00'
       }
     ],
     confidence: Math.random() * 0.3 + 0.7, // 70-100% confidence
