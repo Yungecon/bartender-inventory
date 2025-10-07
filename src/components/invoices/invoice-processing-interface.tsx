@@ -51,7 +51,7 @@ export function InvoiceProcessingInterface() {
         const deltaPercentage = deltaAmount / existingPrice
         
         // Only include if there's a significant change
-        if (Math.abs(deltaPercentage) > 0.02) { // >2% change
+        if (Math.abs(deltaPercentage) > 0.02) { // greater than 2% change
           deltas.push({
             ingredient_id: `ingredient-${Math.random().toString(36).substr(2, 9)}`,
             ingredient_name: item.description,
@@ -61,7 +61,7 @@ export function InvoiceProcessingInterface() {
             delta_percentage: deltaPercentage,
             supplier_name: file.ocr_result.supplier,
             invoice_number: file.ocr_result.invoice_number,
-            requires_approval: Math.abs(deltaPercentage) > 0.15 // >15% requires approval
+            requires_approval: Math.abs(deltaPercentage) > 0.15 // &gt;15% requires approval
           })
         }
       })

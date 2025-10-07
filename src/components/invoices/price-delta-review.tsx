@@ -61,7 +61,7 @@ export function PriceDeltaReview({ deltas, onApprove, onReject }: PriceDeltaRevi
     const abs = Math.abs(percentage)
     if (abs <= 0.05) return 'bg-green-500' // ≤5% - minimal change
     if (abs <= 0.15) return 'bg-yellow-500' // ≤15% - moderate change
-    return 'bg-red-500' // >15% - significant change
+    return 'bg-red-500' // &gt;15% - significant change
   }
 
   const getDeltaText = (percentage: number) => {
@@ -139,7 +139,7 @@ export function PriceDeltaReview({ deltas, onApprove, onReject }: PriceDeltaRevi
                 <div className="text-2xl font-bold text-red-600">
                   {deltas.filter(d => Math.abs(d.delta_percentage) > 0.15).length}
                 </div>
-                <div className="text-sm text-gray-600">Significant (>15%)</div>
+                <div className="text-sm text-gray-600">Significant (&gt;15%)</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600">
