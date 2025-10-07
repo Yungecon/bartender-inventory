@@ -274,7 +274,7 @@ export function POSFileUpload({ onFilesProcessed, onError }: POSFileUploadProps)
                           <p className="text-xs text-gray-500">
                             {(fileData.file.size / 1024 / 1024).toFixed(2)} MB
                           </p>
-                          <Badge className={getFormatColor(fileData.detectedFormat)} size="sm">
+                          <Badge className={getFormatColor(fileData.detectedFormat)}>
                             {getFormatName(fileData.detectedFormat)}
                           </Badge>
                         </div>
