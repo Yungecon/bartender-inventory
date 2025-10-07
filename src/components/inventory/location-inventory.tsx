@@ -145,7 +145,7 @@ export function LocationInventory({ locationId }: LocationInventoryProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {location.snapshots?.map((snapshot: any) => (
+                {(location as any).snapshots?.map((snapshot: any) => (
                   <TableRow key={snapshot.id}>
                     <TableCell className="font-medium">{snapshot.ingredient.name}</TableCell>
                     <TableCell>{snapshot.ingredient.supplier.name}</TableCell>
@@ -157,7 +157,7 @@ export function LocationInventory({ locationId }: LocationInventoryProps) {
               </TableBody>
             </Table>
             
-            {!location.snapshots?.length && (
+            {!(location as any).snapshots?.length && (
               <div className="text-center py-8 text-muted-foreground">
                 No recent activity for this location.
               </div>
