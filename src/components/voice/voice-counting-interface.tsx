@@ -34,9 +34,9 @@ export function VoiceCountingInterface() {
       const snapshots = entries.map(entry => ({
         ingredient_id: entry.ingredient_id,
         location_id: entry.location_id,
-        quantity: entry.quantity,
-        value: entry.value,
-        date: new Date()
+        count: entry.quantity,
+        total_value: entry.value,
+        submitted_at: new Date()
       }))
 
       await submitWorksheet.mutateAsync({ snapshots })
