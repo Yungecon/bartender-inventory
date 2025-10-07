@@ -36,7 +36,7 @@ export const locationsRouter = router({
               },
             },
             orderBy: {
-              submitted_at: 'desc',
+              date: 'desc',
             },
             take: 20,
           },

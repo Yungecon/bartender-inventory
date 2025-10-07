@@ -10,6 +10,40 @@ beforeEach(() => {
   mockReset(prismaMock)
 })
 
+// Real database test utilities for integration tests
+let testPrisma: PrismaClient | null = null
+
+export async function createTestContext() {
+  if (!testPrisma) {
+    testPrisma = new PrismaClient({
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL || 'postgresql://localhost:5432/test_db'
+        }
+      }
+    })
+  }
+  
+  return {
+    prisma: testPrisma,
+    user: {
+      id: 'test-user-id',
+      email: 'test@example.com',
+      role: 'admin' as const
+    }
+  }
+}
+
+export async function cleanupTestData() {
+  if (testPrisma) {
+    // Clean up test data in reverse dependency order
+    await testPrisma.inventorySnapshot.deleteMany({})
+    await testPrisma.ingredient.deleteMany({})
+    await testPrisma.supplier.deleteMany({})
+    await testPrisma.location.deleteMany({})
+  }
+}
+
 // Test data factories
 export const createTestSupplier = (overrides = {}) => ({
   id: '550e8400-e29b-41d4-a716-446655440000',
