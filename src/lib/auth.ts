@@ -12,7 +12,7 @@ export interface User {
 }
 
 export async function createSupabaseServerClient() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
