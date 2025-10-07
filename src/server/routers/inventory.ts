@@ -4,9 +4,9 @@ import { router, publicProcedure, protectedProcedure } from '../trpc'
 const snapshotSchema = z.object({
   ingredient_id: z.string().uuid(),
   location_id: z.string().uuid(),
-  quantity: z.number().int().min(0),
-  value: z.number().min(0),
-  date: z.date().optional(),
+  count: z.number().int().min(0),
+  total_value: z.number().min(0),
+  submitted_at: z.date().optional(),
 })
 
 const worksheetSchema = z.object({
@@ -20,7 +20,7 @@ export const inventoryRouter = router({
       return ctx.prisma.inventorySnapshot.create({
         data: {
           ...input,
-          date: input.date || new Date(),
+          submitted_at: input.submitted_at || new Date(),
         },
         include: {
           ingredient: true,
@@ -38,7 +38,7 @@ export const inventoryRouter = router({
           ctx.prisma.inventorySnapshot.create({
             data: {
               ...snapshot,
-              date: snapshot.date || new Date(),
+              submitted_at: snapshot.submitted_at || new Date(),
             },
           })
         )
@@ -52,7 +52,7 @@ export const inventoryRouter = router({
     .query(async ({ ctx, input }) => {
       const snapshots = await ctx.prisma.inventorySnapshot.findMany({
         where: {
-          date: {
+          submitted_at: {
             gte: new Date(input.date.getFullYear(), input.date.getMonth(), input.date.getDate()),
             lt: new Date(input.date.getFullYear(), input.date.getMonth(), input.date.getDate() + 1),
           },
@@ -81,8 +81,8 @@ export const inventoryRouter = router({
         
         aggregated.set(snapshot.ingredient_id, {
           ...current,
-          total_quantity: current.total_quantity + snapshot.quantity,
-          total_value: current.total_value + Number(snapshot.value),
+          total_quantity: current.total_quantity + snapshot.count,
+          total_value: current.total_value + Number(snapshot.total_value),
         })
       }
 
