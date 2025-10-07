@@ -95,13 +95,12 @@ export async function POST(request: NextRequest) {
       try {
         await unlink(filePath)
       } catch (cleanupError) {
-        console.error('Failed to clean up temporary file:', cleanupError)
+        // Log cleanup error but don't throw - main error is more important
       }
       throw fileError
     }
     
   } catch (error) {
-    console.error('OCR processing error:', error)
     return NextResponse.json(
       { error: 'Failed to process file' }, 
       { status: 500 }

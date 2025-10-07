@@ -57,7 +57,7 @@ export function WorksheetInterface() {
 
   const handleReset = () => {
     // Reset is handled by the TemporaryWorksheet component
-    console.log('Worksheet reset')
+    // No additional action needed here
   }
 
   if (ingredientsLoading || locationsLoading) {

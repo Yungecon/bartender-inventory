@@ -16,36 +16,67 @@ export function VoiceRecorder({ onTranscription, onError, isListening = false }:
   const recognitionRef = useRef<any>(null)
 
   useEffect(() => {
-    // Check if speech recognition is supported
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    // Check if speech recognition is supported across different browsers
+    const SpeechRecognition = 
+      (window as any).SpeechRecognition || 
+      (window as any).webkitSpeechRecognition || 
+      (window as any).mozSpeechRecognition || 
+      (window as any).msSpeechRecognition
     
     if (SpeechRecognition) {
-      setIsSupported(true)
-      
-      const recognition = new SpeechRecognition()
-      recognition.continuous = false
-      recognition.interimResults = false
-      recognition.lang = 'en-US'
-      
-      recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript
-        onTranscription(transcript.trim())
-        setIsRecording(false)
+      try {
+        setIsSupported(true)
+        
+        const recognition = new SpeechRecognition()
+        recognition.continuous = false
+        recognition.interimResults = false
+        recognition.lang = 'en-US'
+        
+        // Add additional browser-specific configurations
+        if (recognition.maxAlternatives) {
+          recognition.maxAlternatives = 1
+        }
+        
+        recognition.onresult = (event: any) => {
+          const transcript = event.results[0][0].transcript
+          onTranscription(transcript.trim())
+          setIsRecording(false)
+        }
+        
+        recognition.onerror = (event: any) => {
+          let errorMessage = 'Speech recognition error'
+          switch (event.error) {
+            case 'no-speech':
+              errorMessage = 'No speech detected. Please try again.'
+              break
+            case 'audio-capture':
+              errorMessage = 'Microphone access denied or not available.'
+              break
+            case 'not-allowed':
+              errorMessage = 'Microphone permission denied. Please allow microphone access.'
+              break
+            case 'network':
+              errorMessage = 'Network error. Please check your connection.'
+              break
+            default:
+              errorMessage = `Speech recognition error: ${event.error}`
+          }
+          onError(errorMessage)
+          setIsRecording(false)
+        }
+        
+        recognition.onend = () => {
+          setIsRecording(false)
+        }
+        
+        recognitionRef.current = recognition
+      } catch (error) {
+        setIsSupported(false)
+        onError('Failed to initialize speech recognition')
       }
-      
-      recognition.onerror = (event: any) => {
-        onError(`Speech recognition error: ${event.error}`)
-        setIsRecording(false)
-      }
-      
-      recognition.onend = () => {
-        setIsRecording(false)
-      }
-      
-      recognitionRef.current = recognition
     } else {
       setIsSupported(false)
-      onError('Speech recognition is not supported in this browser')
+      onError('Speech recognition is not supported in this browser. Please use Chrome, Edge, or Safari.')
     }
 
     return () => {

@@ -1,4 +1,4 @@
-import { vi } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { prismaMock, createTestSupplier, createTestIngredient } from '../utils/prisma-test-utils'
 
 // Mock the prisma client
@@ -7,15 +7,6 @@ vi.mock('@/lib/prisma', () => ({
 }))
 
 import { suppliersRouter } from '@/server/routers/suppliers'
-import { it } from 'zod/v4/locales'
-import { it } from 'zod/v4/locales'
-import { it } from 'zod/v4/locales'
-import { it } from 'zod/v4/locales'
-import { it } from 'zod/v4/locales'
-import { it } from 'zod/v4/locales'
-import { it } from 'zod/v4/locales'
-import { it } from 'zod/v4/locales'
-import { describe } from 'node:test'
 
 // Mock context
 const mockContext = {
