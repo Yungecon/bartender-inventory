@@ -102,7 +102,7 @@ export const inventoryRouter = router({
       return ctx.prisma.inventorySnapshot.findMany({
         where: {
           ingredient_id: input.ingredient_id,
-          date: {
+          submitted_at: {
             gte: startDate,
             lte: endDate,
           },
@@ -111,7 +111,7 @@ export const inventoryRouter = router({
           location: true,
         },
         orderBy: {
-          date: 'asc',
+          submitted_at: 'asc',
         },
       })
     }),
@@ -125,7 +125,7 @@ export const inventoryRouter = router({
       const snapshots = await ctx.prisma.inventorySnapshot.findMany({
         where: {
           location_id: input.location_id,
-          date: {
+          submitted_at: {
             gte: new Date(input.date.getFullYear(), input.date.getMonth(), input.date.getDate()),
             lt: new Date(input.date.getFullYear(), input.date.getMonth(), input.date.getDate() + 1),
           },
@@ -134,8 +134,8 @@ export const inventoryRouter = router({
 
       const totals = snapshots.reduce(
         (acc, snapshot) => ({
-          total_quantity: acc.total_quantity + snapshot.quantity,
-          total_value: acc.total_value + Number(snapshot.value),
+          total_quantity: acc.total_quantity + snapshot.count,
+          total_value: acc.total_value + Number(snapshot.total_value),
           item_count: acc.item_count + 1,
         }),
         { total_quantity: 0, total_value: 0, item_count: 0 }
@@ -157,7 +157,7 @@ export const inventoryRouter = router({
       return ctx.prisma.inventorySnapshot.findMany({
         where: {
           ingredient_id: input.ingredient_id,
-          date: {
+          submitted_at: {
             gte: startDate,
             lte: endDate,
           },
@@ -166,7 +166,7 @@ export const inventoryRouter = router({
           location: true,
         },
         orderBy: {
-          date: 'asc',
+          submitted_at: 'asc',
         },
       })
     }),
@@ -184,7 +184,7 @@ export const inventoryRouter = router({
 
       return ctx.prisma.inventorySnapshot.findMany({
         where: {
-          date: {
+          submitted_at: {
             gte: startDate,
             lte: endDate,
           },
@@ -198,7 +198,7 @@ export const inventoryRouter = router({
           location: true,
         },
         orderBy: {
-          date: 'desc',
+          submitted_at: 'desc',
         },
       })
     }),
@@ -219,7 +219,7 @@ export const inventoryRouter = router({
           location: true,
         },
         orderBy: {
-          date: 'desc',
+          submitted_at: 'desc',
         },
         take: 50, // Limit to recent entries
       })
@@ -229,15 +229,15 @@ export const inventoryRouter = router({
     // Get the most recent snapshot for each ingredient-location combination
     const recentSnapshots = await ctx.prisma.$queryRaw`
       SELECT DISTINCT ON (ingredient_id, location_id) 
-        ingredient_id, location_id, quantity, value, date
-      FROM "InventorySnapshot" 
-      ORDER BY ingredient_id, location_id, date DESC
+        ingredient_id, location_id, count, total_value, submitted_at
+      FROM "inventory_snapshots" 
+      ORDER BY ingredient_id, location_id, submitted_at DESC
     ` as Array<{
       ingredient_id: string
       location_id: string
-      quantity: number
-      value: number
-      date: Date
+      count: number
+      total_value: number
+      submitted_at: Date
     }>
 
     // Aggregate totals by ingredient
@@ -246,8 +246,8 @@ export const inventoryRouter = router({
     for (const snapshot of recentSnapshots) {
       const current = ingredientTotals.get(snapshot.ingredient_id) || { quantity: 0, value: 0 }
       ingredientTotals.set(snapshot.ingredient_id, {
-        quantity: current.quantity + snapshot.quantity,
-        value: current.value + Number(snapshot.value),
+        quantity: current.quantity + snapshot.count,
+        value: current.value + Number(snapshot.total_value),
       })
     }
 
@@ -284,7 +284,7 @@ export const inventoryRouter = router({
           location: true,
         },
         orderBy: {
-          date: 'desc',
+          submitted_at: 'desc',
         },
         take: 12, // 12-month history
       })
