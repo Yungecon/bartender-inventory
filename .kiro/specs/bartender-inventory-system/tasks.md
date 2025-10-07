@@ -101,14 +101,14 @@
   - Verify text-to-speech confirmation functionality
   - _Requirements: 1.1, 1.2_
 
-- [ ] 6. Worksheet Functionality for Temporary Counting
+- [x] 6. Worksheet Functionality for Temporary Counting
   - Implement temporary worksheet storage that doesn't persist after submission
   - Create location-specific counting interface (hobbit, cabinet, bar)
   - Build aggregation system for combining location counts into final totals
   - Implement submission workflow that transfers data to permanent InventorySnapshot storage
   - _Requirements: 14.1, 14.2, 14.3, 14.4, 14.5_
 
-- [ ] 6.1 Worksheet User Interface
+- [x] 6.1 Worksheet User Interface
   - Create temporary counting interface with location organization
   - Build submission confirmation dialog with aggregated totals preview
   - Implement worksheet reset and clear functionality
