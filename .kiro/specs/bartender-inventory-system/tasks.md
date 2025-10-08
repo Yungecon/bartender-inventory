@@ -395,7 +395,7 @@ Each checkpoint must be **deployed and verified working** before proceeding to t
   - Deploy and verify auth pages load correctly on Vercel
   - _Requirements: 17.1, 17.2_
 
-- [-] 20. UI Checkpoint: Core Data Management Pages
+- [x] 20. UI Checkpoint: Core Data Management Pages
   - Create ingredients list page with static data and basic CRUD forms
   - Build suppliers management page with contact information forms
   - Implement locations management with simple add/edit/delete functionality
@@ -405,7 +405,7 @@ Each checkpoint must be **deployed and verified working** before proceeding to t
   - Deploy and verify all CRUD pages function without database connection
   - _Requirements: 11.1, 11.4, 12.1, 12.2_
 
-- [ ] 20.1 UI Checkpoint: Database Integration
+- [x] 20.1 UI Checkpoint: Database Integration
   - Connect ingredients page to actual database with tRPC endpoints
   - Implement real CRUD operations for suppliers with error handling
   - Add location management with persistent storage
@@ -414,7 +414,7 @@ Each checkpoint must be **deployed and verified working** before proceeding to t
   - Deploy and test database operations work correctly on Vercel
   - _Requirements: 11.1, 11.2, 12.1, 12.2_
 
-- [ ] 21. UI Checkpoint: Inventory Tracking Interface
+- [-] 21. UI Checkpoint: Inventory Tracking Interface
   - Create inventory counting page with location-based organization
   - Build simple worksheet interface for manual data entry
   - Implement inventory history view with basic data visualization
