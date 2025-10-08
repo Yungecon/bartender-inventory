@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireAuth } from "@/lib/auth";
 
 export default async function Home() {
-  const user = await requireAuth();
+  // Temporarily disable auth for demo purposes
+  // const user = await requireAuth();
+  const user = { email: "demo@example.com" };
 
   return (
     <div className="container mx-auto p-6">
