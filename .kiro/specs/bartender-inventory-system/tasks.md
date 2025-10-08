@@ -1,5 +1,25 @@
 # Implementation Plan
 
+## UI Checkpoint Strategy
+
+This implementation plan now includes **UI Checkpoint tasks (19-24)** that focus on incremental, deployable milestones. Each checkpoint ensures:
+
+- **Isolated functionality** - Each UI component works independently
+- **Vercel deployment success** - Every checkpoint must deploy without errors
+- **Progressive enhancement** - Features build on previous working checkpoints
+- **Mobile-first design** - All interfaces tested on mobile devices
+- **Graceful degradation** - Advanced features fail gracefully when unavailable
+
+### Checkpoint Phases:
+- **19-19.1**: Basic navigation and authentication (static pages first)
+- **20-20.1**: Core data management (forms before database integration)
+- **21-21.1**: Inventory tracking (manual entry before voice features)
+- **22-22.1**: File processing (upload before complex processing)
+- **23**: Export system (complete feature with testing)
+- **24**: Dashboard and analytics (final user-facing features)
+
+Each checkpoint must be **deployed and verified working** before proceeding to the next.
+
 - [x] 1. Project Setup and Core Infrastructure
   - Initialize Next.js 14+ project with TypeScript and essential dependencies
   - Configure Supabase integration with environment variables and client setup
@@ -357,7 +377,102 @@
   - Clean up deployment artifacts and ensure proper environment configuration
   - _Requirements: 17.1, 17.3, 18.1_
 
-- [ ] 19. Foundation Debugging and Code Consistency Phase
+- [ ] 19. UI Checkpoint: Basic Landing Page and Navigation
+  - Create simple, static landing page that loads without external dependencies
+  - Build basic navigation structure with placeholder pages for all major sections
+  - Implement responsive layout that works on mobile and desktop
+  - Ensure page loads successfully on Vercel without authentication requirements
+  - Test all navigation links lead to placeholder pages (no 404 errors)
+  - Verify build completes successfully and deploys without runtime errors
+  - _Requirements: 18.1, 17.1_
+
+- [ ] 19.1 UI Checkpoint: Authentication Flow (Optional)
+  - Create login page with form validation (no Supabase integration yet)
+  - Build user registration interface with client-side validation
+  - Implement logout functionality and session state management
+  - Add role-based navigation visibility (admin/manager/staff views)
+  - Test authentication flow works end-to-end in development
+  - Deploy and verify auth pages load correctly on Vercel
+  - _Requirements: 17.1, 17.2_
+
+- [ ] 20. UI Checkpoint: Core Data Management Pages
+  - Create ingredients list page with static data and basic CRUD forms
+  - Build suppliers management page with contact information forms
+  - Implement locations management with simple add/edit/delete functionality
+  - Add basic search and filtering capabilities (client-side only)
+  - Ensure all forms have proper validation and error handling
+  - Test pages load quickly and work on mobile devices
+  - Deploy and verify all CRUD pages function without database connection
+  - _Requirements: 11.1, 11.4, 12.1, 12.2_
+
+- [ ] 20.1 UI Checkpoint: Database Integration
+  - Connect ingredients page to actual database with tRPC endpoints
+  - Implement real CRUD operations for suppliers with error handling
+  - Add location management with persistent storage
+  - Test data persistence and retrieval across page refreshes
+  - Verify error handling for network failures and validation errors
+  - Deploy and test database operations work correctly on Vercel
+  - _Requirements: 11.1, 11.2, 12.1, 12.2_
+
+- [ ] 21. UI Checkpoint: Inventory Tracking Interface
+  - Create inventory counting page with location-based organization
+  - Build simple worksheet interface for manual data entry
+  - Implement inventory history view with basic data visualization
+  - Add inventory summary dashboard with current stock levels
+  - Test inventory data entry and calculation logic
+  - Ensure inventory pages work smoothly on tablet devices
+  - Deploy and verify inventory tracking functions correctly
+  - _Requirements: 4.1, 4.2, 4.3, 14.1, 14.2_
+
+- [ ] 21.1 UI Checkpoint: Voice Interface (Progressive Enhancement)
+  - Add voice recording capability to inventory counting page
+  - Implement basic speech-to-text with fallback to manual entry
+  - Create audio feedback system for voice confirmations
+  - Test voice interface works across different browsers and devices
+  - Ensure graceful degradation when microphone access is denied
+  - Deploy and verify voice features work on mobile Safari and Chrome
+  - _Requirements: 1.1, 1.2, 1.3_
+
+- [ ] 22. UI Checkpoint: File Upload and Processing
+  - Create invoice upload page with drag-and-drop interface
+  - Build POS data import page with file format validation
+  - Implement file processing status indicators and progress bars
+  - Add error handling for unsupported file types and sizes
+  - Test file upload works with various file formats and sizes
+  - Ensure upload progress and error states are clearly communicated
+  - Deploy and verify file upload functionality works on Vercel
+  - _Requirements: 5.1, 10.1, 10.3_
+
+- [ ] 22.1 UI Checkpoint: Data Processing Results
+  - Create OCR results review page with editable extracted data
+  - Build POS mapping interface for linking products to ingredients
+  - Implement data validation and correction workflows
+  - Add batch processing capabilities for multiple files
+  - Test data processing accuracy and user correction flows
+  - Deploy and verify processing results display correctly
+  - _Requirements: 5.2, 5.4, 10.2, 10.4_
+
+- [ ] 23. UI Checkpoint: Export and Reporting System
+  - Create export configuration page with format and filter options
+  - Build export history page with download links and status tracking
+  - Implement scheduled export management interface
+  - Add export preview functionality before generation
+  - Test export generation with various data sets and formats
+  - Ensure exports work correctly and files download properly
+  - Deploy and verify export system functions on production
+  - _Requirements: 2.1, 2.2, 2.3_
+
+- [ ] 24. UI Checkpoint: Dashboard and Analytics
+  - Create main dashboard with key metrics and recent activity
+  - Build inventory trends visualization with charts and graphs
+  - Implement alert system for low stock and reorder notifications
+  - Add quick action buttons for common tasks
+  - Test dashboard loads quickly and displays accurate data
+  - Ensure charts and visualizations work on all screen sizes
+  - Deploy and verify dashboard performance on production
+  - _Requirements: 6.3, 6.4, 13.1, 13.3_
+
+- [ ] 25. Foundation Debugging and Code Consistency Phase
   - Review and debug all foundation code (tasks 1-4) for consistency and completeness
   - Update all import statements and type definitions across foundation files
   - Remove temporary files, unused imports, and development artifacts
@@ -366,14 +481,14 @@
   - Run comprehensive linting and type checking on foundation codebase
   - _Requirements: 18.1, 17.1, 11.1_
 
-- [ ] 20. Foundation Design Push and Review Phase
+- [ ] 26. Foundation Design Push and Review Phase
   - Deploy foundation components (auth, database, core CRUD) to preview environment
   - Create basic UI for ingredient and supplier management for visual testing
   - Test authentication flow and role-based access in deployed environment
   - Document any issues found and create fix list for next debugging phase
   - _Requirements: 18.1, 17.1, 3.1_
 
-- [ ] 21. Input Systems Debugging and Code Consistency Phase
+- [ ] 27. Input Systems Debugging and Code Consistency Phase
   - Review and debug voice interface, worksheet, and processing systems (tasks 5-8)
   - Update all API endpoints to ensure consistent error handling and validation
   - Remove temporary processing files and clean up upload directories
@@ -382,7 +497,7 @@
   - Update all component imports and ensure proper TypeScript integration
   - _Requirements: 1.1, 5.1, 10.1, 14.1_
 
-- [ ] 22. Input Systems Design Push and Review Phase
+- [ ] 28. Input Systems Design Push and Review Phase
   - Deploy voice counting interface and invoice processing to preview environment
   - Test voice recognition and worksheet functionality on mobile devices
   - Verify invoice upload and OCR processing works with sample files
@@ -390,7 +505,7 @@
   - Document user experience issues and performance bottlenecks
   - _Requirements: 1.1, 5.1, 10.1, 14.1_
 
-- [ ] 23. AI and Automation Systems Debugging and Code Consistency Phase
+- [ ] 29. AI and Automation Systems Debugging and Code Consistency Phase
   - Review and debug AI services, chatbots, and reorder systems (tasks 9-14)
   - Update all AI adapter interfaces to ensure consistent error handling
   - Remove temporary AI processing files and clean up background job artifacts
@@ -399,7 +514,7 @@
   - Update all async job handlers and ensure proper error recovery
   - _Requirements: 3.1, 7.1, 8.1, 15.1, 16.1_
 
-- [ ] 24. AI and Automation Design Push and Review Phase
+- [ ] 30. AI and Automation Design Push and Review Phase
   - Deploy chatbot interfaces and reorder management to preview environment
   - Test AI ingredient tagging with real product data
   - Verify email template generation and sending functionality
@@ -408,7 +523,7 @@
   - Document AI service performance and recommendation quality
   - _Requirements: 3.1, 7.1, 8.1, 15.1, 16.1_
 
-- [ ] 25. Complete System Debugging and Code Consistency Phase
+- [ ] 31. Complete System Debugging and Code Consistency Phase
   - Review entire codebase for consistency across all components and systems
   - Update all cross-system integrations and ensure proper data flow
   - Remove all temporary files, debug logs, and development artifacts
@@ -418,25 +533,25 @@
   - Run comprehensive test suite and fix any integration issues
   - _Requirements: All requirements integration_
 
-- [ ] 26. Final System Integration and End-to-End Workflows
+- [ ] 32. Final System Integration and End-to-End Workflows
   - Integrate all SLC nodes with proper data flow and error handling
   - Implement cross-system communication and event handling
   - Create comprehensive system testing with realistic data scenarios
   - Build system administration interface for monitoring and maintenance
   - _Requirements: All requirements integration_
 
-- [ ] 26.1 System Administration and Monitoring
+- [ ] 32.1 System Administration and Monitoring
   - Create system health dashboard with component status monitoring
   - Build data integrity checking and maintenance utilities
   - Implement system backup and recovery procedures
   - _Requirements: All requirements integration_
 
-- [ ]* 26.2 Write comprehensive end-to-end tests
+- [ ]* 32.2 Write comprehensive end-to-end tests
   - Test complete workflows from voice counting to export generation
   - Verify cross-system integration and data consistency
   - _Requirements: All requirements integration_
 
-- [ ] 27. Production Deployment and Final Review Phase
+- [ ] 33. Production Deployment and Final Review Phase
   - Deploy complete system to production environment with full monitoring
   - Test all workflows end-to-end in production environment
   - Verify performance under realistic load conditions
