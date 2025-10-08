@@ -377,7 +377,7 @@ Each checkpoint must be **deployed and verified working** before proceeding to t
   - Clean up deployment artifacts and ensure proper environment configuration
   - _Requirements: 17.1, 17.3, 18.1_
 
-- [ ] 19. UI Checkpoint: Basic Landing Page and Navigation
+- [x] 19. UI Checkpoint: Basic Landing Page and Navigation
   - Create simple, static landing page that loads without external dependencies
   - Build basic navigation structure with placeholder pages for all major sections
   - Implement responsive layout that works on mobile and desktop
@@ -386,7 +386,7 @@ Each checkpoint must be **deployed and verified working** before proceeding to t
   - Verify build completes successfully and deploys without runtime errors
   - _Requirements: 18.1, 17.1_
 
-- [ ] 19.1 UI Checkpoint: Authentication Flow (Optional)
+- [x] 19.1 UI Checkpoint: Authentication Flow (Optional)
   - Create login page with form validation (no Supabase integration yet)
   - Build user registration interface with client-side validation
   - Implement logout functionality and session state management
@@ -395,7 +395,7 @@ Each checkpoint must be **deployed and verified working** before proceeding to t
   - Deploy and verify auth pages load correctly on Vercel
   - _Requirements: 17.1, 17.2_
 
-- [ ] 20. UI Checkpoint: Core Data Management Pages
+- [-] 20. UI Checkpoint: Core Data Management Pages
   - Create ingredients list page with static data and basic CRUD forms
   - Build suppliers management page with contact information forms
   - Implement locations management with simple add/edit/delete functionality
